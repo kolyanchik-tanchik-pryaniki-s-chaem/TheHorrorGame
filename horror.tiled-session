@@ -1,0 +1,38 @@
+{
+    "activeFile": "horror1.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "horror 32 2.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "horror 32.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1
+        },
+        "horror1.tmx": {
+            "scale": 1.4487499999999998,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 479.72389991371887,
+                "y": 318.89559965487496
+            }
+        }
+    },
+    "last.imagePath": "F:/The horror game/32x32",
+    "map.lastUsedFormat": "tmx",
+    "openFiles": [
+        "horror1.tmx",
+        "horror 32 2.tsx"
+    ],
+    "project": "horror.tiled-project",
+    "recentFiles": [
+        "horror 32 2.tsx",
+        "horror1.tmx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.type": 1
+}
