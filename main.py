@@ -1,8 +1,14 @@
+import pygame
 import pygame as pg
 import pytmx
 import random
 TILE_SCALE = 2
 FPS = 60
+pygame.init()
+def text_render1(text):
+    font1 = pg.font.SysFont(None, 100)
+    text_surface = font1.render(text, True, pg.Color("white"))
+    return text_surface
 class Notes(pg.sprite.Sprite):
     def __init__(self, image, x, y, width, height):
         pg.sprite.Sprite.__init__(self)
@@ -172,6 +178,7 @@ class Game:
         self.walls = pg.sprite.Group()
         self.player = Player(self)
         self.notes = pg.sprite.Group()
+        self.took_notes = 0
         self.enemy_event = pg.USEREVENT + 1
         self.enemy_event1 = pg.event.Event(self.enemy_event)
         self.enemy = Enemy(self.player, self)
@@ -190,12 +197,13 @@ class Game:
                    self.walls.add(wall)
                    self.all_sprites.add(wall)
                if tile and layer.name == 'notes':
-                   note = Notes(pg.image.load('Slender_page_4_by_evilkittenninja-d5ef535.webp'), x, y,self.tmx_map.tilewidth, self.tmx_map.tileheight )
+                   note = Notes(pg.image.load('Slender_page_4_by_evilkittenninja-d5ef535.webp'), x * self.tmx_map.tilewidth, y * self.tmx_map.tileheight,self.tmx_map.tilewidth, self.tmx_map.tileheight )
                    self.notes.add(note)
                    self.all_sprites.add(note)
         pg.time.set_timer(self.enemy_event1, 2000)
         self.temp_x = self.enemy.rect.x
         self.temp_y = self.enemy.rect.y
+        self.all_notes = len(self.notes)
         self.run()
     def run(self):
        self.is_running = True
@@ -210,6 +218,9 @@ class Game:
         self.walls.update(self.player.velocity_x, self.player.velocity_y)
         self.player.update(pg.key.get_pressed())
         self.enemy.update()
+        self.notes.update(self.player.velocity_x, self.player.velocity_y)
+        if pg.sprite.spritecollide(self.player, self.notes, True):
+            self.took_notes += 1
 
     def event(self):
         for event in pg.event.get():
@@ -233,14 +244,16 @@ class Game:
                 self.temp_x = self.enemy.rect.x
     def draw(self):
         self.screen.blit(pg.transform.scale(pg.image.load("Снимок экрана 2026-10-04 105440.png"), (800, 600)), (0, 0))
-        for note in self.notes:
-            self.screen.blit(note.image, note.rect)
+
         for wall in self.walls:
             self.screen.blit(wall.image, wall.rect)
         for platform in self.background_platform:
             self.screen.blit(platform.image, platform.rect)
         self.player.draw(self.screen)
         self.screen.blit(self.enemy.image, self.enemy.rect)
+        for note in self.notes:
+            self.screen.blit(note.image, note.rect)
+        self.screen.blit(text_render1(str(self.took_notes)+'/'+str(self.all_notes)), (10, 10))
         pg.display.flip()
 if __name__ == '__main__':
     game = Game()
