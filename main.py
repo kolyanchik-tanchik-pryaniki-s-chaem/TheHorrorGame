@@ -171,7 +171,7 @@ class Game:
         self.tmx_map = pytmx.load_pygame("horror1.tmx")
         self.walls = pg.sprite.Group()
         self.player = Player(self)
-
+        self.notes = pg.sprite.Group()
         self.enemy_event = pg.USEREVENT + 1
         self.enemy_event1 = pg.event.Event(self.enemy_event)
         self.enemy = Enemy(self.player, self)
@@ -190,6 +190,9 @@ class Game:
                    self.walls.add(wall)
                    self.all_sprites.add(wall)
                if tile and layer.name == 'notes':
+                   note = Notes(pg.image.load('Slender_page_4_by_evilkittenninja-d5ef535.webp'), x, y,self.tmx_map.tilewidth, self.tmx_map.tileheight )
+                   self.notes.add(note)
+                   self.all_sprites.add(note)
         pg.time.set_timer(self.enemy_event1, 2000)
         self.temp_x = self.enemy.rect.x
         self.temp_y = self.enemy.rect.y
@@ -216,20 +219,11 @@ class Game:
                 if self.temp_x - self.enemy.rect.x < 6 or self.enemy.rect.x + self.temp_x < 6 and self.enemy.top == 0 or self.enemy.bottom == 0 and self.enemy.is_following:
 
                     self.enemy.is_following = False
-                    # if self.enemy.velocity_x == self.enemy.right:
-                    #     self.enemy.velocity_x = self.enemy.left
-                    # if self.enemy.velocity_x == self.enemy.left:
-                    #     self.enemy.velocity_x = self.enemy.right
                     self.enemy.velocity_x = random.choice((self.enemy.left, self.enemy.right))
                 if self.enemy.right == 0 or self.enemy.left == 0 and self.enemy.top == 0 or self.enemy.bottom == 0:
                     self.enemy.is_following = True
                 if self.temp_y - self.enemy.rect.y < 6 or self.enemy.rect.y + self.temp_y < 6 and self.enemy.left == 0 or self.enemy.right == 0 and self.enemy.is_following:
                     self.enemy.is_following = False
-
-                    # if self.enemy.velocity_y == self.enemy.top:
-                    #     self.enemy.velocity_y = self.enemy.bottom
-                    # if self.enemy.velocity_y == self.enemy.bottom:
-                    #     self.enemy.velocity_y = self.enemy.top
                     self.enemy.velocity_y = random.choice((self.enemy.top, self.enemy.bottom))
                 if self.enemy.top == 0 and self.enemy.bottom == 0:
                     self.enemy.is_following = True
@@ -239,6 +233,8 @@ class Game:
                 self.temp_x = self.enemy.rect.x
     def draw(self):
         self.screen.blit(pg.transform.scale(pg.image.load("Снимок экрана 2026-10-04 105440.png"), (800, 600)), (0, 0))
+        for note in self.notes:
+            self.screen.blit(note.image, note.rect)
         for wall in self.walls:
             self.screen.blit(wall.image, wall.rect)
         for platform in self.background_platform:
